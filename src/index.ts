@@ -1,1 +1,1 @@
-export { Kafka } from '../src/setup'
+export { RabbitMQ } from './setup'

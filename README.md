@@ -1,26 +1,25 @@
-# Kafka Module
-This module provides an Apache Kafka includes a connection and setup the producer and consumer.
+# MongoDB module
+This module provides a MongoDB integration for connecting to a MongoDB server, performing database operations, and managing collections.
 
 # .env configuration
 config in microservice
-
-# client.properties configuration
-config in main root dir
 
 # microsevice config example package.json
 {
   "name": "[microservice name]",
   "version": "1.0.0",
-  "description": "import the kafka module",
+  "description": "import the db module",
   "main": "[the server path]",
   "keywords": [],
   "author": "Shimi Yadan",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^20.4.5",
-    "typescript": "^5.1.6",
-    "ts-node": "^10.9.1",
-    "kafka": "git+https://github.com/ShimiYadan/kafka.git#1.0.0",
+    "@types/node": "^17.0.21",
+    "db": "git+https://github.com/ShimiYadan/db.git#1.0.1",
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "typescript": "file:typescript"
   }
 }
 
@@ -32,64 +31,55 @@ config in main root dir
   }
 }
 
-# Tests
-npx jest
+# MongoDB Module
+This module provides a MongoDB integration for connecting to a MongoDB server, performing database operations, and managing collections.
 
 # Installation
-To use this module, you need to have an Apache Kafka installed and running. You also need to install the required dependencies by running the following command:
-
-Using Confluent Cloud for Apache Kafka
-```https://confluent.cloud/```
-
-install node -v 18+ (LTS July 2023)
-you can download it from the official website here https://nodejs.org/en
+To use this module, you need to have MongoDB installed and running. You also need to install the required dependencies by running the following command:
 
 # run the commands
+install node -v 14+
 npm install
-npm run build
+npx run build
+
+# DB
+The DB class provides methods for connecting to MongoDB, accessing collections, and performing database operations.
 
 # Error Handling
-This module throwes errors when there are issues with the connection or executing a producer or consumer  setups. You should handle these errors appropriately in your application.
+This module throws errors when there are issues with connecting to the MongoDB server or executing database operations. You should handle these errors appropriately in your application.
 
 # Usage
 ```
-import { Kafka } from 'kafka'
+import { DB } from 'db'
 
 import * as dotenv from 'dotenv'
 dotenv.config({path: './.env'})
 
-const GROUP_ID = process.env.GROUP_ID || 'default_groupId'
-const TOPIC = process.env.TOPIC || 'default_topic'
+const DB_NAME = process.env.DB_NAME || 'default'
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost:27017'
+const TODOS_COLLECTION = process.env.TODOS_COLLECTION || 'default'
+const USERS_COLLECTION = process.env.USERS_COLLECTION || 'default'
 
 async function main() {
-
   try {
+    await db.connectToMongoDB()
 
-    const msg1: object = {
-        m: 1
-    }
-    const msg2: object = {
-        m: 2
-    }
-   
-    console.log(`groupId: ${GROUP_ID}`)
-    const kafka = new Kafka(GROUP_ID)
+    const collection = db.getCollection('my-collection')
+
+    const documents = await db.findDocuments(collection, { name: 'John' })
+    console.log('Found documents:', documents)
     
-    await kafka.produce(TOPIC, msg1, new Date())
-    await kafka.produce(TOPIC, msg2, new Date())
-
-    kafka.activateConsumer(TOPIC, (err: Error | null, msg: Message | null) => {
-        if(err) console.error(`Error while activating consumer: ${err}`)
-        console.log(`a message has received: ${msg?.value?.toString() ?? 'no message receivd'}`)
-    }) 
+    const insertedId = await db.insertDocument(collection, { name: 'Jane', age: 30 })
+    console.log('Inserted document ID:', insertedId)
 
   } catch (error) {
     console.error('Error:', error)
+  } finally {
+    await db.close()
   }
 }
 main();
 ```
-
 # License
 This module is released under the MIT License.
 
