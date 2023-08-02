@@ -1,0 +1,16 @@
+{
+    "restartable": "rs",
+    "verbose": true,
+    "exec": "npm run build",
+    "events": {
+        "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+    },
+    "watch": [
+        "src/**/*.ts",
+        "node_modules/db/src/**"
+    ],
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "js, json, ts"
+}
