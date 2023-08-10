@@ -1,13 +1,13 @@
 /*
-    This module provides a MongoDB integration for connecting to a MongoDB server,
-    performing database operations, and managing collections.
+    This module provides a rabbitMQ connection and simple functions such as produce and
+    consume messages.
 */
 import { connect, Channel, Connection, ConsumeMessage } from 'amqplib'
 
 let RABBIT_MQ_URL: string
 
 export class RabbitMQ {
-    // Singleton instance of the database client
+    // Singleton instance of the rabbitMQ connection
     private channel: Channel | null = null
     private connection: Connection | null = null
     
@@ -21,7 +21,7 @@ export class RabbitMQ {
         await this.createChannel()
     }
 
-    // Connect to the MongoDB server and return the database client
+    // Connect to the rabbitMQ server and return the connection.
     async connectToRabbitMQ(): Promise<Connection> {
         if (!this.connection) {
             console.log('connecting to RabbitMQ...')
@@ -31,7 +31,7 @@ export class RabbitMQ {
         return this.connection
     }
 
-    // Get a reference to the collection
+    // Cteate Channel
     async createChannel(): Promise<Channel | null> {
         if (this.connection && !this.channel) {
             this.channel = await this.connection.createChannel()
