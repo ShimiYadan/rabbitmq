@@ -39,7 +39,7 @@ export class RabbitMQ {
         return this.channel
     }
   
-    public async setupConsumer(queueName: string): Promise<void> {
+    async setupConsumer(queueName: string): Promise<void> {
         await this.channel?.assertQueue(queueName)
         await this.channel?.consume(queueName, (msg: ConsumeMessage | null) => {
             if(msg !== null) {
@@ -49,14 +49,14 @@ export class RabbitMQ {
         })
     }
 
-    public async setupProducer(queueName: string, message: any): Promise<void> {
+    async setupProducer(queueName: string, message: any): Promise<void> {
         let sMsg = JSON.stringify(message)
         await this.channel?.assertQueue(queueName)
         await this.channel?.sendToQueue(queueName, Buffer.from(sMsg))
         console.log(`The message ${sMsg} was sent to queue ${queueName}`)
     }
 
-    public async close(): Promise<void> {
+    async close(): Promise<void> {
         await this.channel?.close()
         this.channel = null
         await this.connection?.close()
