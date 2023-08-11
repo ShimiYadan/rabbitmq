@@ -15,7 +15,7 @@ config in microservice
   "license": "ISC",
   "dependencies": {
     "@types/node": "^17.0.21",
-    "db": "git+https://github.com/ShimiYadan/rabbitmq.git#1.0.1",
+    "rabbitmq": "git+https://github.com/ShimiYadan/rabbitmq.git#v1.0.0",
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
